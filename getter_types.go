@@ -43,12 +43,12 @@ type BlockTxMeta struct {
 		Readonly []string `json:"readonly"`
 		Writable []string `json:"writable"`
 	} `json:"loadedAddresses"`
-	LogMessages       []string      `json:"logMessages"`
-	PostBalances      []int64       `json:"postBalances"`
-	PostTokenBalances []interface{} `json:"postTokenBalances"`
-	PreBalances       []int64       `json:"preBalances"`
-	PreTokenBalances  []interface{} `json:"preTokenBalances"`
-	Rewards           []any         `json:"rewards"`
+	LogMessages       []string                  `json:"logMessages"`
+	PostBalances      []int64                   `json:"postBalances"`
+	PostTokenBalances []BlockTxMetaTokenBalance `json:"postTokenBalances"`
+	PreBalances       []int64                   `json:"preBalances"`
+	PreTokenBalances  []BlockTxMetaTokenBalance `json:"preTokenBalances"`
+	Rewards           []any                     `json:"rewards"`
 	Status            struct {
 		Ok interface{} `json:"Ok"`
 	} `json:"status"`
