@@ -1,16 +1,26 @@
 package solient
 
-type Block struct {
-	BlockHeight       uint64       `json:"blockHeight"`
-	BlockTime         int64        `json:"blockTime"`
-	Blockhash         string       `json:"blockhash"`
-	PreviousBlockhash string       `json:"previousBlockhash"`
-	ParentSlot        uint64       `json:"parentSlot"`
-	Rewards           BlockRewords `json:"rewards"`
-	Transactions      []BlockTx    `json:"transactions"`
+type RpcRespCtx struct {
+	ApiVersion string `json:"apiVersion"`
+	Slot       int64  `json:"slot"`
 }
 
-type BlockRewords struct {
+type RpcRespResult[Value any] struct {
+	Context RpcRespCtx `json:"context"`
+	Value   Value      `json:"value"`
+}
+
+type Block struct {
+	BlockHeight       uint64        `json:"blockHeight"`
+	BlockTime         int64         `json:"blockTime"`
+	Blockhash         string        `json:"blockhash"`
+	PreviousBlockhash string        `json:"previousBlockhash"`
+	ParentSlot        uint64        `json:"parentSlot"`
+	Rewards           []BlockReword `json:"rewards"`
+	Transactions      []BlockTx     `json:"transactions"`
+}
+
+type BlockReword struct {
 	Commission  any    `json:"commission"`
 	Lamports    int    `json:"lamports"`
 	PostBalance int64  `json:"postBalance"`
@@ -19,9 +29,9 @@ type BlockRewords struct {
 }
 
 type BlockTx struct {
-	Meta        BlockTxMeta
-	Transaction BlockTxDetail
-	Version     string
+	Meta        BlockTxMeta   `json:"meta"`
+	Transaction BlockTxDetail `json:"transaction"`
+	Version     any           `json:"version"`
 }
 
 type BlockTxMeta struct {
@@ -74,4 +84,41 @@ type BlockTxDetail struct {
 		RecentBlockhash string `json:"recentBlockhash"`
 	} `json:"message"`
 	Signatures []string `json:"signatures"`
+}
+
+type TokenAccount struct {
+	Data       TokenAccountData `json:"data"`
+	Executable bool             `json:"executable"`
+	Lamports   int64            `json:"lamports"`
+	Owner      string           `json:"owner"`
+	RentEpoch  float64          `json:"rentEpoch"`
+	Space      int              `json:"space"`
+}
+
+type TokenAccountData struct {
+	Parsed struct {
+		Info struct {
+			IsNative          bool        `json:"isNative"`
+			Mint              string      `json:"mint"`
+			Owner             string      `json:"owner"`
+			RentExemptReserve TokenAmount `json:"rentExemptReserve"`
+			State             string      `json:"state"`
+			TokenAmount       TokenAmount `json:"tokenAmount"`
+		} `json:"info"`
+		Type string `json:"type"`
+	} `json:"parsed"`
+	Program string `json:"program"`
+	Space   int    `json:"space"`
+}
+
+type TokenAccountRespValue struct {
+	Account TokenAccount `json:"account"`
+	Pubkey  string       `json:"pubkey"`
+}
+
+type TokenAmount struct {
+	Amount         string  `json:"amount"`
+	Decimals       int64   `json:"decimals"`
+	UiAmount       float64 `json:"uiAmount"`
+	UiAmountString string  `json:"uiAmountString"`
 }
